@@ -1,8 +1,9 @@
-function Basket() {
+function Basket(props) {
   return (
     <section className="Basket">
         <ul>
-            <li>Some product x 3, 1234,-</li>
+            {props.cart.map(item => 
+                <li>{item.productdisplayname} x {item.amount}, {item.price*item.amount},-</li>)}
             </ul>
             <button>Buy now plz</button>
     </section>
