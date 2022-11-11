@@ -1,10 +1,26 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import Header from './assets/components/Header'
+import ProductList from './assets/components/ProductList'
+import Basket from './assets/components/Basket'
 
 function App() {
-  
+  const [products, setProducts] = useState([])
+
+  useEffect(() =>{
+    async function getData(){
+      const res = await fetch("https://kea-alt-del.dk/t7/api/products");
+      const data = await res.json()
+      setProducts(data)
+        }
+    getData()
+  }, [])
   return (
-    <div className="App"></div>
-  )
+    <div className="App">
+      <Header />
+      <ProductList products={products}/>
+      <Basket products={products}/>
+    </div>
+  );
 }
 
 export default App
