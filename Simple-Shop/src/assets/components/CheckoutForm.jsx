@@ -1,20 +1,26 @@
-import {useRef} from "react";
+import {useRef, useState} from "react";
 import {insertOrder} from "../components/modules/db";
 
 function CheckoutForm(props) {
     const theForm = useRef(null);
-
-    function submit(e) {
+    const [paymentCompleted, setPaymentCompleted] = useState(false)
+    async function submit(e) {
         e.preventDefault();
-        insertOrder({
+        const response = await insertOrder({
             name: theForm.current.elements.name.value,
             email: theForm.current.elements.email.value,
             address: theForm.current.elements.address.value,
             order: props.cart,
-        })
+        });
+        if(response && response.length){
+            setPaymentCompleted(true);
+        }
     }
   return (
-    <form onSubmit={submit} ref={theForm}>
+    <>
+    {paymentCompleted ? (<p>THANK YOU!</p>)
+    :
+     (<form onSubmit={submit} ref={theForm}>
         <div className="form-control">
             <label htmlFor="form-name">Name</label>
             <input required type="text" name="name" id="form-name" />
@@ -28,7 +34,8 @@ function CheckoutForm(props) {
             <textarea required  name="address" id="form-address" />
         </div>
         <button >Pay</button>
-    </form>
+    </form>)}
+    </>
   )
 }
 
