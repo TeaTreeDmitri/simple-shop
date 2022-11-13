@@ -1,4 +1,8 @@
+import { useState } from 'react'
+import CheckoutForm from "./CheckoutForm";
+
 function Basket(props) {
+    const [showForm, setShowForm] = useState(false);
     function getTotal(){
         let total = 0;
         props.cart.forEach(item => {
@@ -9,11 +13,13 @@ function Basket(props) {
   return (
     <section className="Basket">
         <ul>
-            {props.cart.map(item => 
-                <li>{item.productdisplayname} x {item.amount}, {item.price*item.amount},-</li>)}
+            {props.cart.map(item =>
+                <li key = {item.id}>{item.productdisplayname} x {item.amount}, {item.price*item.amount},-
+                <button onClick={() => props.removeFromCart(item.id)}>X</button></li>)}
             </ul>
-            <h1>Total: {getTotal()},-</h1>
-            <button>Buy now plz</button>
+            <h3>Total: {getTotal()},-</h3>
+            {!showForm && <button onClick={() => setShowForm(true)}>Buy now plz</button>}
+            {showForm && <CheckoutForm cart={props.cart}/>}
     </section>
   )
 }
